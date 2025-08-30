@@ -11,12 +11,11 @@ require('dotenv').config();
   const upload = multer({ storage });
 
 
-  app.use(bodyParser.json())
-  app.set("view engine", "ejs");
-  app.use(express.static('./public'));
-  app.use(bodyParser.urlencoded({
-    extended: true
-  }))
+  app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));  // <-- Important for Vercel
+app.use(express.static(path.join(__dirname, "public")));
 
 
 
@@ -54,21 +53,6 @@ require('dotenv').config();
   var db = mongoose.connection
   db.on('error', () => console.log("Error in Connecting to Database"))
   db.once('open', () => console.log("Connected to Database"))
-
-
-  app.listen(process.env.PORT, () => {
-    console.log("Server is running on port 3002");
-  });
-
-
-
-
-
-
-
-
-
-
 
 app.post("/msg_received", (req, res) => {
   var name = req.body.name
@@ -139,41 +123,6 @@ app.post("/form_submitted", upload.single('file'), (req, res) => {
     flag: true
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 app.get('/Work/:content', function (req, res) {
@@ -340,3 +289,5 @@ app.get('/Work/:content', function (req, res) {
 
   res.render("work", data);
 });
+
+module.exports = app;
